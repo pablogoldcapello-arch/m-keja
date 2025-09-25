@@ -37,7 +37,7 @@ export default function Login({ onSwitchToRegister }: RegisterProps) {
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center mx-auto">
-            <span className="text-white font-bold text-xl">R</span>
+            <span className="text-white font-bold text-xl">M</span>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account

@@ -293,16 +293,20 @@ import Login from './login/page';
 import HomeTab from '@/components/tabs/HomeTab';
 import ServicesTab from '@/components/tabs/ServicesTab';
 import Link from 'next/link';
+import UsersTab from '@/components/tabs/UsersTab';
+
 
 /* ---------- helpers ---------- */
-const navItems = [
+
+/*const navItems = [
   { id: 'home', label: 'Home', icon: '🏠' },
   { id: 'dashboard', label: 'Dashboard', icon: '📊' },
   { id: 'properties', label: 'Properties', icon: '🏠' },
   { id: 'services', label: 'Services', icon: '🔧' },
   { id: 'payments', label: 'Payments', icon: '💳' },
+  ...(user?.role === 'admin' ? [{ id: 'users', label: 'Users', icon: '👥' }] : []),
   { id: 'support', label: 'Support', icon: '🛟' },
-];
+];*/
 
 /* ---------- page ---------- */
 export default function Home() {
@@ -310,6 +314,17 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('home');
+
+  const navItems = [
+  { id: 'home', label: 'Home', icon: '🏠' },
+  { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+  { id: 'properties', label: 'Properties', icon: '🏠' },
+  { id: 'services', label: 'Services', icon: '🔧' },
+  { id: 'payments', label: 'Payments', icon: '💳' },
+  ...(user?.role === 'admin' ? [{ id: 'users', label: 'Users', icon: '👥' }] : []),
+  { id: 'support', label: 'Support', icon: '🛟' },
+];
+
 
   /* ---------- render ---------- */
   const renderDashboard = () => {
@@ -333,6 +348,7 @@ export default function Home() {
       case 'services':   return <ServicesTab />;
       case 'payments':   return <PaymentsTab role={user.role} />;
       case 'support':    return <SupportTab role={user.role} />;
+      case 'users':       return <UsersTab role={user.role} />;
       default:           return <HomeTab />;
     }
   };
@@ -365,9 +381,9 @@ export default function Home() {
             {/* logo */}
             <div className="flex items-center flex-shrink-0 px-4">
               <div className="w-8 h-8 bg-white rounded-full grid place-items-center">
-                <span className="text-indigo-600 font-bold">R</span>
+                <span className="text-indigo-600 font-bold">M</span>
               </div>
-              <h1 className="ml-2 text-white text-xl font-bold">RentalEase</h1>
+              <h1 className="ml-2 text-white text-xl font-bold">M-keja</h1>
             </div>
 
             {/* nav */}
@@ -382,7 +398,7 @@ export default function Home() {
                       : 'text-indigo-100 hover:bg-indigo-700 hover:text-white'
                   }`}
                 >
-                  <span className="mr-3">{item.icon}</span>
+                  {/*<span className="mr-3">{item.icon}</span>*/}
                   <span className="text-sm font-medium break-words">{item.label}</span>
                 </button>
               ))}
