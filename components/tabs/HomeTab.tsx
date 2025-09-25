@@ -163,7 +163,15 @@ export default function HomeTab() {
             <div className="flex items-center justify-between text-sm text-gray-500">
               <span>{p.bedrooms} beds</span><span>{p.bathrooms} baths</span><span>{p.area} m²</span>
             </div>
-            <button className="w-full mt-4 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">View Details</button>
+             <Link 
+              href={`/properties/${p.id}`}
+              className="w-full mt-4 bg-indigo-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 font-medium flex items-center justify-center group"
+            >
+              View Details
+              <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Link>
           </div>
         </div>
       ))}
