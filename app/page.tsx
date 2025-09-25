@@ -428,68 +428,68 @@ export default function Home() {
 
         {/* ---------------- MOBILE SIDEBAR ---------------- */}
         {sidebarOpen && (
-  <div className="fixed inset-0 z-40 lg:hidden">
-    {/* backdrop */}
-    <div
-      className="absolute inset-0 bg-gray-600/75"
-      onClick={() => setSidebarOpen(false)}
-      aria-hidden="true"
-    />
+        <div className="fixed inset-0 z-40 lg:hidden">
+          {/* backdrop */}
+          <div
+            className="absolute inset-0 bg-gray-600/75"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+          />
 
-    {/* drawer – max-w-full prevents it from ever being wider than the viewport */}
-    <aside className="relative max-w-full w-64 h-full bg-indigo-600 flex flex-col">
-      {/* header */}
-      <div className="flex items-center px-4 pt-5">
-        <div className="w-8 h-8 bg-white rounded-full grid place-items-center shrink-0">
-          <span className="text-indigo-600 font-bold">M</span>
+          {/* drawer – max-w-full prevents it from ever being wider than the viewport */}
+          <aside className="relative max-w-full w-64 h-full bg-indigo-600 flex flex-col">
+            {/* header */}
+            <div className="flex items-center px-4 pt-5">
+              <div className="w-8 h-8 bg-white rounded-full grid place-items-center shrink-0">
+                <span className="text-indigo-600 font-bold">M</span>
+              </div>
+              <h1 className="ml-2 text-white text-xl font-bold break-words">M-keja</h1>
+              <button
+                type="button"
+                className="ml-auto rounded-md p-2 text-indigo-200 hover:text-white shrink-0"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="sr-only">Close sidebar</span>
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* nav – min-w-0 lets flex children shrink below their default size */}
+            <nav className="mt-8 px-4 space-y-2 min-w-0">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    setSidebarOpen(false);
+                  }}
+                  className={`w-full flex items-center px-3 py-3 rounded-lg transition-colors ${
+                    activeTab === item.id
+                      ? 'bg-white text-indigo-600'
+                      : 'text-indigo-100 hover:bg-indigo-700 hover:text-white'
+                  }`}
+                >
+                  {/*<span className="mr-3 shrink-0">{item.icon}</span>*/}
+                  {/* text wraps and can break if necessary */}
+                  <span className="text-sm font-medium text-left break-words">{item.label}</span>
+                </button>
+              ))}
+            </nav>
+
+            {/* footer *
+            <div className="mt-auto px-4 pb-4">
+              <button
+                onClick={logout}
+                className="w-full text-left text-indigo-100 hover:text-white text-sm font-medium break-words py-3"
+              >
+                Sign out
+              </button>
+            </div>*/}
+          </aside>
         </div>
-        <h1 className="ml-2 text-white text-xl font-bold break-words">M-keja</h1>
-        <button
-          type="button"
-          className="ml-auto rounded-md p-2 text-indigo-200 hover:text-white shrink-0"
-          onClick={() => setSidebarOpen(false)}
-        >
-          <span className="sr-only">Close sidebar</span>
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      {/* nav – min-w-0 lets flex children shrink below their default size */}
-      <nav className="mt-8 px-4 space-y-2 min-w-0">
-        {navItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => {
-              setActiveTab(item.id);
-              setSidebarOpen(false);
-            }}
-            className={`w-full flex items-center px-3 py-3 rounded-lg transition-colors ${
-              activeTab === item.id
-                ? 'bg-white text-indigo-600'
-                : 'text-indigo-100 hover:bg-indigo-700 hover:text-white'
-            }`}
-          >
-            {/*<span className="mr-3 shrink-0">{item.icon}</span>*/}
-            {/* text wraps and can break if necessary */}
-            <span className="text-sm font-medium text-left break-words">{item.label}</span>
-          </button>
-        ))}
-      </nav>
-
-      {/* footer *
-      <div className="mt-auto px-4 pb-4">
-        <button
-          onClick={logout}
-          className="w-full text-left text-indigo-100 hover:text-white text-sm font-medium break-words py-3"
-        >
-          Sign out
-        </button>
-      </div>*/}
-    </aside>
-  </div>
-)}
+      )}
         {/* ---------------- MAIN AREA ---------------- */}
         <div className="lg:pl-64 flex flex-col flex-1 w-full">
           {/* header */}

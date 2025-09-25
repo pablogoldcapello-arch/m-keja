@@ -364,7 +364,6 @@ export default function HomeTab() {
 
  
         <div className="space-y-6">
-        
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Top Agents</h2>
             <div className="space-y-4">
