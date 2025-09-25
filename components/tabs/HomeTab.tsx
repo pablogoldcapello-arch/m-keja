@@ -1,5 +1,6 @@
 /*  HomeTab.tsx  –  fully refactored, zero UI changes, all tabs working  */
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 /* ---------- interfaces ---------- */
 interface Property {
@@ -139,6 +140,11 @@ export default function HomeTab() {
       {properties.map(p => (
         <div key={p.id} className="border rounded-xl overflow-hidden hover:shadow-lg transition">
           <div className="h-48 bg-gray-200 relative">
+              <img
+              src={p.image || '/api/placeholder/400/300'}
+              alt={p.name}
+              className="w-full h-full object-cover"
+            />
             {p.featured && <span className="absolute top-3 left-3 bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-medium">Featured</span>}
             <div className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md">
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
@@ -286,6 +292,11 @@ export default function HomeTab() {
               {properties.filter(p => p.featured).map((property) => (
                 <div key={property.id} className="border rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="h-48 bg-gray-200 relative">
+                    <img
+                      src={property.image || '/api/placeholder/400/300'}
+                      alt={property.name}
+                      className="w-full h-full object-cover"
+                    />
                     {property.featured && (
                       <span className="absolute top-3 left-3 bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-medium">
                         Featured
@@ -314,9 +325,15 @@ export default function HomeTab() {
                       <span>{property.bathrooms} baths</span>
                       <span>{property.area} m²</span>
                     </div>
-                    <button className="w-full mt-4 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+                    <Link 
+                      href={`/properties/${property.id}`}
+                      className="w-full mt-4 bg-indigo-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 font-medium flex items-center justify-center group"
+                    >
                       View Details
-                    </button>
+                      <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </Link>
                   </div>
                 </div>
               ))}

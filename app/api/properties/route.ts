@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+/*import { NextRequest, NextResponse } from 'next/server';
 import { verify } from 'jsonwebtoken';
 import dbConnect from '@/lib/dbConnect';
 import Property from '@/models/Property';
@@ -94,6 +94,176 @@ export async function POST(req: NextRequest) {
       if (imageFiles[i] instanceof File) {
         images.push(`/api/placeholder/property-image-${Date.now()}-${i}`);
       }
+    }
+
+    // Create property
+    const property = await Property.create({
+      ...propertyData,
+      images,
+      status: 'available',
+      isActive: true,
+      isVerified: false // Admin verification required
+    });
+
+    // Populate landlord/agent information
+    await property.populate('landlord', 'firstName lastName email phone');
+    if (property.agent) {
+      await property.populate('agent', 'firstName lastName email phone');
+    }
+
+    return NextResponse.json(
+      { 
+        message: 'Property created successfully', 
+        property 
+      },
+      { status: 201 }
+    );
+
+  } catch (error) {
+    console.error('Error creating property:', error);
+    return NextResponse.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}*/
+
+import { NextRequest, NextResponse } from 'next/server';
+import { verify } from 'jsonwebtoken';
+import dbConnect from '@/lib/dbConnect';
+import Property from '@/models/Property';
+import User from '@/models/User';
+
+export async function POST(req: NextRequest) {
+  try {
+    await dbConnect();
+
+    // Check authentication
+    const token = req.cookies.get('token')?.value;
+    if (!token) {
+      return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
+    }
+
+    // Verify token
+    let decoded: any;
+    try {
+      decoded = verify(token, process.env.JWT_SECRET as string);
+    } catch {
+      return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
+    }
+
+    // Check if user is a landlord or agent
+    const user = await User.findById(decoded.userId);
+    if (!user || (user.role !== 'landlord' && user.role !== 'agent')) {
+      return NextResponse.json({ 
+        message: 'Only landlords and agents can create properties' 
+      }, { status: 403 });
+    }
+
+    // Check content type and parse accordingly
+    const contentType = req.headers.get('content-type');
+    
+    let propertyData: any;
+    let images: string[] = [];
+
+    if (contentType && contentType.includes('application/json')) {
+      // Parse JSON data (from frontend with Cloudinary URLs)
+      const jsonData = await req.json();
+      
+      propertyData = {
+        name: jsonData.name,
+        type: jsonData.type,
+        unitType: jsonData.unitType,
+        description: jsonData.description,
+        location: jsonData.location,
+        pricing: jsonData.pricing,
+        size: jsonData.size,
+        amenities: jsonData.amenities || [],
+        furnishing: jsonData.furnishing,
+        rules: jsonData.rules || [],
+        availability: new Date(jsonData.availability),
+        images: jsonData.images || [], // This now contains Cloudinary URLs
+        landlord: decoded.userId,
+        agent: user.role === 'agent' ? decoded.userId : undefined
+      };
+      
+      images = jsonData.images || [];
+      
+    } else if (contentType && contentType.includes('multipart/form-data')) {
+      // Parse form data (original implementation for file uploads)
+      const formData = await req.formData();
+      
+      propertyData = {
+        name: formData.get('name') as string,
+        type: formData.get('type') as string,
+        unitType: formData.get('unitType') as string,
+        description: formData.get('description') as string,
+        location: {
+          address: formData.get('location.address') as string,
+          city: formData.get('location.city') as string,
+          state: formData.get('location.state') as string,
+          country: formData.get('location.country') as string || 'Kenya'
+        },
+        pricing: {
+          rent: Number(formData.get('pricing.rent')),
+          deposit: Number(formData.get('pricing.deposit')),
+          currency: formData.get('pricing.currency') as string || 'KSh'
+        },
+        size: {
+          bedrooms: Number(formData.get('size.bedrooms')),
+          bathrooms: Number(formData.get('size.bathrooms')),
+          area: Number(formData.get('size.area')),
+          unit: formData.get('size.unit') as string || 'sqft'
+        },
+        amenities: JSON.parse(formData.get('amenities') as string || '[]'),
+        furnishing: formData.get('furnishing') as string,
+        rules: JSON.parse(formData.get('rules') as string || '[]'),
+        availability: new Date(formData.get('availability') as string),
+        landlord: decoded.userId,
+        agent: user.role === 'agent' ? decoded.userId : undefined
+      };
+
+      // Handle image uploads for form data
+      const imageFiles = formData.getAll('images') as File[];
+      for (let i = 0; i < imageFiles.length; i++) {
+        if (imageFiles[i] instanceof File) {
+          images.push(`/api/placeholder/property-image-${Date.now()}-${i}`);
+        }
+      }
+    } else {
+      return NextResponse.json(
+        { message: 'Unsupported content type' },
+        { status: 400 }
+      );
+    }
+
+    // Validate required fields
+    const requiredFields = [
+      'name', 'type', 'unitType', 'description',
+      'location.address', 'location.city', 'location.state',
+      'pricing.rent', 'pricing.deposit',
+      'size.bedrooms', 'size.bathrooms', 'size.area',
+      'furnishing', 'availability'
+    ];
+
+    for (const field of requiredFields) {
+      const value = field.includes('.') 
+        ? field.split('.').reduce((obj: any, key) => obj?.[key], propertyData)
+        : (propertyData as any)[field];
+      
+      if (value === undefined || value === null || value === '') {
+        return NextResponse.json({ 
+          message: `Missing required field: ${field}` 
+        }, { status: 400 });
+      }
+    }
+
+    // Validate images
+    if (images.length === 0) {
+      return NextResponse.json(
+        { message: 'At least one image is required' },
+        { status: 400 }
+      );
     }
 
     // Create property
