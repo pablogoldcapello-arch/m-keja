@@ -441,9 +441,9 @@ export default function Home() {
       {/* header */}
       <div className="flex items-center px-4 pt-5">
         <div className="w-8 h-8 bg-white rounded-full grid place-items-center shrink-0">
-          <span className="text-indigo-600 font-bold">R</span>
+          <span className="text-indigo-600 font-bold">M</span>
         </div>
-        <h1 className="ml-2 text-white text-xl font-bold break-words">RentalEase</h1>
+        <h1 className="ml-2 text-white text-xl font-bold break-words">M-keja</h1>
         <button
           type="button"
           className="ml-auto rounded-md p-2 text-indigo-200 hover:text-white shrink-0"
@@ -471,7 +471,7 @@ export default function Home() {
                 : 'text-indigo-100 hover:bg-indigo-700 hover:text-white'
             }`}
           >
-            <span className="mr-3 shrink-0">{item.icon}</span>
+            {/*<span className="mr-3 shrink-0">{item.icon}</span>*/}
             {/* text wraps and can break if necessary */}
             <span className="text-sm font-medium text-left break-words">{item.label}</span>
           </button>
@@ -565,15 +565,13 @@ export default function Home() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                       </svg>
                     </button>
-
-                    {/* avatar */}
-{/* avatar */}
-<Link href="/profile" className="relative cursor-pointer">
-  <div className="w-10 h-10 bg-indigo-500 rounded-full grid place-items-center text-white font-semibold break-all">
-    {user.firstName.charAt(0)}{user.lastName.charAt(0)}
-  </div>
-  <span className="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-400 border-2 border-white" />
-</Link>
+                  {/* avatar */}
+                  <Link href="/profile" className="relative cursor-pointer">
+                    <div className="w-10 h-10 bg-indigo-500 rounded-full grid place-items-center text-white font-semibold break-all">
+                      {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                    </div>
+                    <span className="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-400 border-2 border-white" />
+                  </Link>
                   </div>
                 </div>
               </div>

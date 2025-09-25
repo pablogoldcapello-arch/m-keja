@@ -284,7 +284,7 @@ export default function ServicesTab() {
                   {service.description}
                 </p>
 
-                {/* Provider Info */}
+                {/* Provider Info *
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-semibold">
                     {service.serviceProvider.firstName.charAt(0)}{service.serviceProvider.lastName.charAt(0)}
@@ -295,6 +295,26 @@ export default function ServicesTab() {
                     </p>
                     <p className="text-sm text-gray-600">{service.location}</p>
                   </div>
+                </div>*/}
+
+                {/* Provider Info */}
+                <div className="flex items-center gap-3 mb-4">
+                  {service.serviceProvider ? (
+                    <>
+                      <div className="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-semibold">
+                        {service.serviceProvider.firstName?.charAt(0) ?? ''}
+                        {service.serviceProvider.lastName?.charAt(0) ?? ''}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">
+                          {service.serviceProvider.firstName} {service.serviceProvider.lastName}
+                        </p>
+                        <p className="text-sm text-gray-600">{service.location}</p>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-sm text-gray-500">Provider information unavailable</div>
+                  )}
                 </div>
 
                 {/* Rating and Experience */}
